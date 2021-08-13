@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sensors_request_permission_title_again">不打开权限无法读取设备信息哦</string>
+    <string name="sensors_permission_phone_state">读取手机状态和身份</string>
+    <string name="sensors_permission_tip">为给您提供统计，APP内推广服务</string>
+    <string name="sensors_go_settings">去设置</string>
+    <string name="sensors_cancel">取消</string>
+</resources>
