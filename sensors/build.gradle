@@ -2,10 +2,10 @@ plugins {
     id 'com.android.library'
     id 'kotlin-android'
 }
-
-apply plugin: 'com.github.dcendents.android-maven'
 apply plugin:'kotlin-android-extensions'
-group = 'com.github.lodqc'
+//不能喝apply maven共存
+//apply plugin: 'com.github.dcendents.android-maven'
+//group = 'com.github.lodqc'
 android {
     compileSdkVersion 30
 
@@ -33,6 +33,13 @@ android {
         jvmTarget = '1.8'
 
     }
+    repositories {
+        maven {
+            url 'https://nexus.codemao.cn/nexus/content/repositories/android/'
+        }
+        google()
+        jcenter()
+    }
 }
 
 dependencies {
@@ -43,4 +50,22 @@ dependencies {
     implementation 'com.sensorsdata.analytics.android:SensorsAnalyticsSDK:5.3.1'
     implementation 'com.github.li-xiaojun:XPopup:2.4.9'
     implementation 'pub.devrel:easypermissions:2.0.1'
+}
+
+apply plugin: 'maven'
+uploadArchives {
+    repositories.mavenDeployer {
+        repository(url: "https://nexus.codemao.cn/nexus/content/repositories/android/") {
+            authentication(userName: "developer01", password: "TxFn8QO2tXYm3nWU") // maven授权信息
+        }
+        snapshotRepository(url: "https://nexus.codemao.cn/nexus/content/repositories/snapshots/") {
+            authentication(userName: "developer01", password: "TxFn8QO2tXYm3nWU")
+        }
+        // 唯一标识
+        pom.groupId = "cn.codemao.sensors"
+        // 项目名称
+        pom.artifactId = "sensors-sdk"
+        // 版本号
+        pom.version = "1.0.0"
+    }
 }
