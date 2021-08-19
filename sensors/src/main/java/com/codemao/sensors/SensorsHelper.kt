@@ -67,16 +67,15 @@ object SensorsHelper {
         // 初始化 SDK 后，设置动态公共属性
         registerSuperProperties()
 
-        if (checkSensorsPermissionDialog(
+        if (!SensorsSPUtil.getInstance().getBoolean(Manifest.permission.READ_PHONE_STATE)&&checkSensorsPermissionDialog(
                 sensors.getActivity(),
-                SensorsSPUtil.getInstance().getBoolean(Manifest.permission.READ_PHONE_STATE)
             ) {
                 trackAppInstall()
             }
         ) {
             trackAppInstall()
         } else {
-            SensorsSPUtil.getInstance().put(Manifest.permission.READ_PHONE_STATE, true)
+            trackAppInstall()
         }
     }
 

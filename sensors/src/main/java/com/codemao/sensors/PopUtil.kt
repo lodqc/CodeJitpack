@@ -18,7 +18,6 @@ object PopUtil {
     const val All_PERMISSION_REQUEST_CODE = 101
     fun checkSensorsPermissionDialog(
         ctx: Activity,
-        hasReject: Boolean,
         block: ((Boolean) -> Unit)? = null
     ): Boolean {
         val needPermission = arrayOf(Manifest.permission.READ_PHONE_STATE)
@@ -30,7 +29,6 @@ object PopUtil {
 
             }
         }
-        Log.d("permissionDialog", "hasReject = $hasReject permission size = ${permissions.size}")
         if (permissions.isNotEmpty()) {
             val pop =
                 RequestPermissionPop(context = ctx, permission = permissions, checkable = false)
@@ -49,12 +47,13 @@ object PopUtil {
                     }
                     block?.invoke(pass)
                 }).show()
-            pop.post {
-                pop.setTitle(R.string.sensors_request_permission_title_again, 18f)
-                if (hasReject) {
-                    pop.initGoSettingBtn()
-                }
-            }
+//            pop.post {
+//                pop.setTitle(R.string.sensors_request_permission_title_again, 18f)
+//                if (hasReject) {
+//                    pop.initGoSettingBtn()
+//                }
+//            }
+            SensorsSPUtil.getInstance().put(Manifest.permission.READ_PHONE_STATE, true)
         }
         return permissions.isEmpty()
     }
