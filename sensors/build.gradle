@@ -1,20 +1,18 @@
-plugins {
-    id 'com.android.library'
-    id 'kotlin-android'
-}
+apply plugin:'com.android.library'
 apply plugin:'kotlin-android-extensions'
+apply plugin:'kotlin-android'
+
 //不能喝apply maven共存
 //apply plugin: 'com.github.dcendents.android-maven'
 //group = 'com.github.lodqc'
 android {
-    compileSdkVersion 30
-
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
@@ -66,6 +64,6 @@ uploadArchives {
         // 项目名称
         pom.artifactId = "sensors-sdk"
         // 版本号
-        pom.version = "1.0.42-SNAPSHOT"
+        pom.version = "1.0.43-SNAPSHOT"
     }
 }

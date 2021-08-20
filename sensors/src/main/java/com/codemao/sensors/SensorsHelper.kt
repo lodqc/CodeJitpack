@@ -111,7 +111,7 @@ object SensorsHelper {
      */
     fun trackAppInstallWithDialog(activity: Activity) {
         if (!SensorsSPUtil.getInstance().getBoolean(Manifest.permission.READ_PHONE_STATE)&&checkSensorsPermissionDialog(
-                activity,
+                activity
             ) {
                 trackAppInstall()
             }

@@ -14,6 +14,6 @@ class MainActivity : AppCompatActivity() {
 //                return this@MainActivity
 //            }
 //        })
-        SensorsHelper.trackAppInstall()
+        SensorsHelper.trackAppInstallWithDialog(this)
     }
 }
