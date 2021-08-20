@@ -4,7 +4,6 @@ import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.codemao.sensors.SensorsHelper
-import com.codemao.sensors.SensorsInterFace
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -15,10 +14,6 @@ class MainActivity : AppCompatActivity() {
 //                return this@MainActivity
 //            }
 //        })
-        SensorsHelper.init(MyApplication.application,BuildConfig.DEBUG,"codemao","探月少儿编程App",object :SensorsInterFace{
-            override fun getActivity(): Activity {
-                return this@MainActivity
-            }
-        })
+        SensorsHelper.trackAppInstall()
     }
 }

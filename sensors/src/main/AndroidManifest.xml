@@ -2,4 +2,20 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.codemao.sensors">
 
+    <application>
+        <activity
+            android:name="com.sensorsdata.analytics.android.sdk.dialog.SchemeActivity"
+            android:configChanges="orientation|screenSize"
+            android:exported="true"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="sa66ee25a5" />
+            </intent-filter>
+        </activity>
+    </application>
 </manifest>

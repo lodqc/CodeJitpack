@@ -24,8 +24,7 @@ object SensorsHelper {
         context: Application,
         isDebug: Boolean,
         channel: String,
-        productName: String,
-        sensors: SensorsInterFace?=null
+        productName: String
     ) {
         this.context = context
         this.channel = channel
@@ -66,19 +65,6 @@ object SensorsHelper {
 //        SensorsDataAPI.sharedInstance().setGPSLocation(latitude,longitude);
         // 初始化 SDK 后，设置动态公共属性
         registerSuperProperties()
-
-        sensors?.let {
-            if (!SensorsSPUtil.getInstance().getBoolean(Manifest.permission.READ_PHONE_STATE)&&checkSensorsPermissionDialog(
-                    it.getActivity(),
-                ) {
-                    trackAppInstall()
-                }
-            ) {
-                trackAppInstall()
-            } else {
-                trackAppInstall()
-            }
-        }
     }
 
 
@@ -120,6 +106,21 @@ object SensorsHelper {
     }
 
 
+    /**
+     * 记录激活事件弹出权限请求弹窗
+     */
+    fun trackAppInstallWithDialog(activity: Activity) {
+        if (!SensorsSPUtil.getInstance().getBoolean(Manifest.permission.READ_PHONE_STATE)&&checkSensorsPermissionDialog(
+                activity,
+            ) {
+                trackAppInstall()
+            }
+        ) {
+            trackAppInstall()
+        } else {
+            trackAppInstall()
+        }
+    }
     /**
      * 记录激活事件
      */
