@@ -25,7 +25,7 @@ object SensorsHelper {
         isDebug: Boolean,
         channel: String,
         productName: String,
-        sensors: SensorsInterFace
+        sensors: SensorsInterFace?=null
     ) {
         this.context = context
         this.channel = channel
@@ -67,15 +67,17 @@ object SensorsHelper {
         // 初始化 SDK 后，设置动态公共属性
         registerSuperProperties()
 
-        if (!SensorsSPUtil.getInstance().getBoolean(Manifest.permission.READ_PHONE_STATE)&&checkSensorsPermissionDialog(
-                sensors.getActivity(),
+        sensors?.let {
+            if (!SensorsSPUtil.getInstance().getBoolean(Manifest.permission.READ_PHONE_STATE)&&checkSensorsPermissionDialog(
+                    it.getActivity(),
+                ) {
+                    trackAppInstall()
+                }
             ) {
                 trackAppInstall()
+            } else {
+                trackAppInstall()
             }
-        ) {
-            trackAppInstall()
-        } else {
-            trackAppInstall()
         }
     }
 
@@ -155,4 +157,5 @@ object SensorsHelper {
     fun report(eventName:String,json:JSONObject){
         SensorsDataAPI.sharedInstance().track(eventName, json)
     }
+
 }
