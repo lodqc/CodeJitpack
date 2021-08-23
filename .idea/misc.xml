@@ -3,6 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="healthmanageui/src/main/res/layout-land/activity_health_manager_cover.xml" value="0.22066549912434325" />
+        <entry key="healthmanageui/src/main/res/layout-land/activity_health_manager_dialog.xml" value="0.22066549912434325" />
+        <entry key="healthmanageui/src/main/res/layout/activity_health_manager_cover.xml" value="0.2625" />
+        <entry key="healthmanageui/src/main/res/layout/activity_health_manager_dialog.xml" value="0.2625" />
+        <entry key="healthmanageui/src/main/res/layout/activity_health_manager_log.xml" value="0.2625" />
         <entry key="sensors/src/main/res/drawable/_bg_10_7245ff_corner_8.xml" value="0.23645833333333333" />
         <entry key="sensors/src/main/res/drawable/_bg_7245ff_corner_8.xml" value="0.23645833333333333" />
         <entry key="sensors/src/main/res/drawable/_bg_c9c9dc_corner_8.xml" value="0.23645833333333333" />

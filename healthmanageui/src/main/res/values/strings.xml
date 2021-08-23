@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="str_health_manager_i_know">我知道了</string>
+    <string name="str_health_manager_tips_title">温馨提示</string>
+    <string name="str_health_manager_tips_content">夜深了，休息一下吧！</string>
+    <string name="str_health_manager_tips_i_know">知道了</string>
+</resources>
