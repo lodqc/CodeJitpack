@@ -4,10 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.TextUtils
-import com.codemao.healthmanageui.HealthManagerLogActivity
-import com.codemao.sensors.SensorsHelper
-import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,6 +15,5 @@ class MainActivity : AppCompatActivity() {
 //            }
 //        })
 //        SensorsHelper.trackAppInstallWithDialog(this)
-        startActivity(Intent(this, HealthManagerLogActivity::class.java))
     }
 }
