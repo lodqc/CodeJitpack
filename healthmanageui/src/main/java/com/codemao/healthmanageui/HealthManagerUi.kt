@@ -4,7 +4,7 @@ import android.app.Application
 import com.codemao.healthmanager.HealthManager
 import com.codemao.healthmanager.config.HMConfig
 
-object HealManagerUi {
+object HealthManagerUi {
     /**
      * @clazz 设置欢迎页面
      */

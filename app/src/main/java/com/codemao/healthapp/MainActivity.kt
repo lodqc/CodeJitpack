@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import com.codemao.healthmanager.HealthManager
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -15,5 +17,8 @@ class MainActivity : AppCompatActivity() {
 //            }
 //        })
 //        SensorsHelper.trackAppInstallWithDialog(this)
+        for(bean in HealthManager.getLog()) {
+            Log.e("fq", "onCreate: $bean")
+        }
     }
 }

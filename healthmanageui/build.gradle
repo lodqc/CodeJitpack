@@ -41,10 +41,6 @@ android {
 }
 
 dependencies {
-
-    implementation 'androidx.core:core-ktx:1.3.2'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.github.li-xiaojun:XPopup:2.4.9'
     api 'cn.codemao.android.core:cm_health_manager:1.0.0_5-SNAPSHOT'
 }
 
@@ -62,6 +58,6 @@ uploadArchives {
         // 项目名称
         pom.artifactId = "healthmanage-ui"
         // 版本号
-        pom.version = "1.0.01-SNAPSHOT"
+        pom.version = "1.0.02-SNAPSHOT"
     }
 }
