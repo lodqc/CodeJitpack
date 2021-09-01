@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.codemao.healthmanager.HealthManager
+import com.codemao.share.showShareTextPop
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,8 +18,9 @@ class MainActivity : AppCompatActivity() {
 //            }
 //        })
 //        SensorsHelper.trackAppInstallWithDialog(this)
-        for(bean in HealthManager.getLog()) {
-            Log.e("fq", "onCreate: $bean")
-        }
+//        for(bean in HealthManager.getLog()) {
+//            Log.e("fq", "onCreate: $bean")
+//        }
+        showShareTextPop(this, "测试分享")
     }
 }

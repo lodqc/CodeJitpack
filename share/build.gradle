@@ -1,0 +1,68 @@
+apply plugin:'com.android.library'
+apply plugin:'kotlin-android-extensions'
+apply plugin:'kotlin-android'
+
+//不能喝apply maven共存
+//apply plugin: 'com.github.dcendents.android-maven'
+//group = 'com.github.lodqc'
+android {
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+
+    }
+    repositories {
+        maven {
+            url 'https://nexus.codemao.cn/nexus/content/repositories/android/'
+        }
+        google()
+        jcenter()
+    }
+}
+
+dependencies {
+    implementation 'androidx.core:core-ktx:1.3.2'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'cn.codemao.android.account:account-sdk:3.0.97-SNAPSHOT'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'com.github.li-xiaojun:XPopup:2.4.9'
+}
+
+apply plugin: 'maven'
+uploadArchives {
+    repositories.mavenDeployer {
+        repository(url: "https://nexus.codemao.cn/nexus/content/repositories/android/") {
+            authentication(userName: "developer01", password: "TxFn8QO2tXYm3nWU") // maven授权信息
+        }
+        snapshotRepository(url: "https://nexus.codemao.cn/nexus/content/repositories/snapshots/") {
+            authentication(userName: "developer01", password: "TxFn8QO2tXYm3nWU")
+        }
+        // 唯一标识
+        pom.groupId = "cn.codemao.sensors"
+        // 项目名称
+        pom.artifactId = "sensors-sdk"
+        // 版本号
+        pom.version = "1.0.11-SNAPSHOT"
+    }
+}
