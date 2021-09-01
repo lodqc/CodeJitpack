@@ -59,10 +59,10 @@ uploadArchives {
             authentication(userName: "developer01", password: "TxFn8QO2tXYm3nWU")
         }
         // 唯一标识
-        pom.groupId = "cn.codemao.sensors"
+        pom.groupId = "com.codemao.share"
         // 项目名称
-        pom.artifactId = "sensors-sdk"
+        pom.artifactId = "share-sdk"
         // 版本号
-        pom.version = "1.0.11-SNAPSHOT"
+        pom.version = "1.0.12-SNAPSHOT"
     }
 }

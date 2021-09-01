@@ -48,8 +48,8 @@ interface ShareListener {
 fun showShareTextPop(
     context: Context,
     text: String?,
+    title: String,
     showMiaoCode: ShareListener? = null,
-    title: String? = null,
     uri: Uri? = null,
     type: Int = -1
 ) {
@@ -390,28 +390,14 @@ class GeneralSharePop(context: Context) : BottomPopupView(context), View.OnClick
                     if (isShareText) {
 //                        shareUtil.shareText(shareText, shareTitle ?: "探月少儿编程")
                         val url = URLEncoder.encode(shareText, "utf-8")
-                        when (shareTitle) {
-                            "探月少儿编程 - 视频详情" -> {
-                                WxShareUtil.shareMiniProgram(
-                                    "gh_c3ea31bd2f63",
-                                    "",
-                                    "/pages/webview/main?target=$url",
-                                    "",
-                                    "优秀编程少年",
-                                    context
-                                )
-                            }
-                            else -> {
-                                WxShareUtil.shareMiniProgram(
-                                    "gh_c3ea31bd2f63",
-                                    "",
-                                    "/pages/webview/main?target=$url",
-                                    "",
-                                    shareTitle ?: "",
-                                    context
-                                )
-                            }
-                        }
+                        WxShareUtil.shareMiniProgram(
+                            "gh_c3ea31bd2f63",
+                            mUri.toString(),
+                            "/pages/webview/main?target=$url",
+                            "",
+                            shareTitle ?: "",
+                            context
+                        )
                     } else {
                         if (!TextUtils.isEmpty(shareImgPath)) {
                             WxShareUtil.shareImgToWXFriend(

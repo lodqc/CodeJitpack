@@ -22,8 +22,8 @@ object ShareManager {
         return context
     }
 
-    fun loadBitemap(minProgramCover: String): Bitmap {
-        return callBack.loadBitemap(minProgramCover)
+    fun loadBitemap(minProgramCover: String, function: (bitmap:Bitmap) -> Unit){
+        callBack.loadBitemap(minProgramCover,function)
     }
 
     fun getPermission(context: Context?, permissions: Array<String>, function: (granted:Boolean) -> Unit) {

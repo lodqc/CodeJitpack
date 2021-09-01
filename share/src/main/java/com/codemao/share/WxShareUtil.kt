@@ -237,32 +237,31 @@ object WxShareUtil {
             minProgramCover = encodeBase64File(false, url)
         }
         kotlin.runCatching {
-            val resource = ShareManager.loadBitemap(minProgramCover)
-            val miniProgramObj = WXMiniProgramObject()
-            miniProgramObj.webpageUrl = "http://www.qq.com" // 兼容低版本的网页链接
-            miniProgramObj.miniprogramType = WXMiniProgramObject.MINIPTOGRAM_TYPE_RELEASE // 正式版:0，测试版:1，体验版:2
-            miniProgramObj.userName = username // 小程序原始id
-            miniProgramObj.path = path //小程序页面路径；对于小游戏，可以只传入 query 部分，来实现传参效果，如：传入 "?foo=bar"
-            miniProgramObj.withShareTicket = true
-            val msg = WXMediaMessage(miniProgramObj)
-            msg.title = title // 小程序消息title
-            msg.description = desc
-            if (bitmap != null){
-                msg.thumbData = bitmap2Bytes(bitmap, 128)
-            }else{
-                resource?.run {// 小程序消息desc
-                    msg.thumbData = bitmap2Bytes(this, 128)
+            ShareManager.loadBitemap(minProgramCover){
+                val miniProgramObj = WXMiniProgramObject()
+                miniProgramObj.webpageUrl = "http://www.qq.com" // 兼容低版本的网页链接
+                miniProgramObj.miniprogramType = WXMiniProgramObject.MINIPTOGRAM_TYPE_RELEASE // 正式版:0，测试版:1，体验版:2
+                miniProgramObj.userName = username // 小程序原始id
+                miniProgramObj.path = path //小程序页面路径；对于小游戏，可以只传入 query 部分，来实现传参效果，如：传入 "?foo=bar"
+                miniProgramObj.withShareTicket = true
+                val msg = WXMediaMessage(miniProgramObj)
+                msg.title = title // 小程序消息title
+                msg.description = desc
+                if (bitmap != null){
+                    msg.thumbData = bitmap2Bytes(bitmap, 128)
+                }else{
+                    msg.thumbData = bitmap2Bytes(it, 128)
                 }
+                val req: SendMessageToWX.Req = SendMessageToWX.Req()
+                req.transaction = System.currentTimeMillis().toString()
+                req.message = msg
+                req.scene = SendMessageToWX.Req.WXSceneSession // 目前只支持会话
+                WXAPIFactory.createWXAPI(context, ShareManager.WX_APP_ID).sendReq(req)
             }
-            val req: SendMessageToWX.Req = SendMessageToWX.Req()
-            req.transaction = System.currentTimeMillis().toString()
-            req.message = msg
-            req.scene = SendMessageToWX.Req.WXSceneSession // 目前只支持会话
-            WXAPIFactory.createWXAPI(context, ShareManager.WX_APP_ID).sendReq(req)
-
         }.onFailure {
             Log.d("111", "作品封面加载异常")
         }
+
     }
 
 
