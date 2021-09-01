@@ -10,9 +10,13 @@ import com.codemao.healthmanager.HealthManager
 import com.codemao.share.showShareTextPop
 
 class MainActivity : AppCompatActivity() {
+    companion object{
+        lateinit var activity:MainActivity
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        activity = this
 //        HealthManage.init(MyApplication.application, object : HealthInterFace {
 //            override fun getActivity(): AppCompatActivity {
 //                return this@MainActivity
