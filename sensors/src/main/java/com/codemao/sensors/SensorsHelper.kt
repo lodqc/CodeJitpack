@@ -125,15 +125,18 @@ object SensorsHelper {
      * 记录激活事件
      */
     fun trackAppInstall() {
-        try {
-            val properties = JSONObject()
-            //这里的 DownloadChannel 负责记录下载商店的渠道，值应传入具体应用商店包的标记。如果没有为不同商店打多渠道包，则可以忽略该属性的代码示例。
-            properties.put("DownloadChannel", channel)
-            // 触发激活事件
-            // 如果您之前使用 trackInstallation() 触发的激活事件，需要继续保持原来的调用，无需改为 trackAppInstall()，否则会导致激活事件数据分离。
-            SensorsDataAPI.sharedInstance().trackAppInstall(properties)
-        } catch (e: Exception) {
-            e.printStackTrace()
+        if(!SensorsSPUtil.getInstance().getBoolean("isDownloadChannel")){
+            try {
+                val properties = JSONObject()
+                //这里的 DownloadChannel 负责记录下载商店的渠道，值应传入具体应用商店包的标记。如果没有为不同商店打多渠道包，则可以忽略该属性的代码示例。
+                properties.put("DownloadChannel", channel)
+                // 触发激活事件
+                // 如果您之前使用 trackInstallation() 触发的激活事件，需要继续保持原来的调用，无需改为 trackAppInstall()，否则会导致激活事件数据分离。
+                SensorsDataAPI.sharedInstance().trackAppInstall(properties)
+                SensorsSPUtil.getInstance().put("isDownloadChannel",true)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 

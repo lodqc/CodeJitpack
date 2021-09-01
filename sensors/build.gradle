@@ -64,6 +64,6 @@ uploadArchives {
         // 项目名称
         pom.artifactId = "sensors-sdk"
         // 版本号
-        pom.version = "1.0.43-SNAPSHOT"
+        pom.version = "1.0.44-SNAPSHOT"
     }
 }
