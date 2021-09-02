@@ -9,12 +9,14 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
 import android.widget.Toast
+import androidx.annotation.DrawableRes
 import java.io.*
 import java.lang.StringBuilder
 
 object ShareManager {
     var QQ_APP_ID: String= ""
     var WX_APP_ID: String = ""
+    var shareDrawableId: Int = R.drawable.share_logo
     private const val LISTENER_WX_RESP: String = "LISTENER_WX_RESP"
     private lateinit var context:Application
     private lateinit var callBack: ShareCallBack
@@ -30,11 +32,12 @@ object ShareManager {
         callBack.getPermission(context,permissions,function)
     }
 
-    fun init(context:Application,wxId:String,qqId:String,callBack: ShareCallBack){
+    fun init(context:Application,wxId:String,qqId:String,@DrawableRes shareDrawableId:Int,callBack: ShareCallBack){
         ShareManager.callBack = callBack
         QQ_APP_ID = qqId
         WX_APP_ID = wxId
         ShareManager.context = context
+        this.shareDrawableId = shareDrawableId
     }
 
     var broadcastReceiver: BroadcastReceiver? = null

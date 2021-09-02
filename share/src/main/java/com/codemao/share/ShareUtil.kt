@@ -9,6 +9,7 @@ import com.codemao.share.ShareManager.Bitmap2Bytes
 import com.codemao.share.ShareManager.base64ToBitmap
 import com.tencent.mm.opensdk.openapi.IWXAPI
 import cn.codemao.android.share.interfaces.IshareResult
+import com.codemao.share.ShareManager.shareDrawableId
 import com.tencent.mm.opensdk.modelmsg.WXImageObject
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX
@@ -152,7 +153,7 @@ class ShareUtil(context: Context?) {
             msg.title = des
             val thumbBmp = BitmapFactory.decodeResource(
                 ShareManager.getContext().resources,
-                R.drawable.share_logo
+                shareDrawableId
             )
             msg.thumbData = Bitmap2Bytes(thumbBmp)
         } else {
@@ -187,7 +188,7 @@ class ShareUtil(context: Context?) {
             msg.title = des
             val thumbBmp = BitmapFactory.decodeResource(
                 ShareManager.getContext().resources,
-                R.drawable.share_icon
+                shareDrawableId
             ) //微信分享图标不能超过30K  请注意
             msg.thumbData = Bitmap2Bytes(thumbBmp)
         } else {
