@@ -16,6 +16,7 @@ import java.lang.StringBuilder
 object ShareManager {
     var QQ_APP_ID: String= ""
     var WX_APP_ID: String = ""
+    var WX_USERNAME: String = ""
     var shareDrawableId: Int = R.drawable.share_logo
     private const val LISTENER_WX_RESP: String = "LISTENER_WX_RESP"
     private lateinit var context:Application
@@ -32,10 +33,17 @@ object ShareManager {
         callBack.getPermission(context,permissions,function)
     }
 
-    fun init(context:Application,wxId:String,qqId:String,@DrawableRes shareDrawableId:Int,callBack: ShareCallBack){
+    /**
+     * @param wxId 应用的微信id
+     * @param qqId 应用的QQid
+     * @param wxUserName 跳转或分享的小程序id
+     * @param shareDrawableId 分享的应用图标
+     */
+    fun init(context:Application,wxId:String,wxUserName:String,qqId:String,@DrawableRes shareDrawableId:Int,callBack: ShareCallBack){
         ShareManager.callBack = callBack
         QQ_APP_ID = qqId
         WX_APP_ID = wxId
+        WX_USERNAME = wxUserName
         ShareManager.context = context
         this.shareDrawableId = shareDrawableId
     }

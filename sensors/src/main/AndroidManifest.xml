@@ -13,8 +13,9 @@
 
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:scheme="sa66ee25a5" />
+<!--                <data android:scheme="sa66ee25a5" />-->
+<!--                正式环境scheme-->
+                <data android:scheme="sad398bf2b" />
             </intent-filter>
         </activity>
     </application>

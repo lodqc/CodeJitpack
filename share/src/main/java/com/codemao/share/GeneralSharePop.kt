@@ -11,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.Group
 import androidx.core.view.isVisible
+import com.codemao.share.ShareManager.WX_USERNAME
 import com.codemao.share.ShareManager.base64ToBitmap
 import com.lxj.xpopup.XPopup
 import com.lxj.xpopup.core.BottomPopupView
@@ -391,7 +392,7 @@ class GeneralSharePop(context: Context) : BottomPopupView(context), View.OnClick
 //                        shareUtil.shareText(shareText, shareTitle ?: "探月少儿编程")
                         val url = URLEncoder.encode(shareText, "utf-8")
                         WxShareUtil.shareMiniProgram(
-                            "gh_c3ea31bd2f63",
+                            WX_USERNAME,
                             mUri.toString(),
                             "/pages/webview/main?target=$url",
                             "",
