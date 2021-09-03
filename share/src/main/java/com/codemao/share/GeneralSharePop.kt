@@ -337,7 +337,14 @@ class GeneralSharePop(context: Context) : BottomPopupView(context), View.OnClick
         val intent = Intent("android.intent.action.SEND")
         intent.type = "text/plain"
         intent.putExtra(Intent.EXTRA_SUBJECT, "分享")
-        intent.putExtra(Intent.EXTRA_TEXT, shareText)
+        url?.let {
+
+        }
+        if(type == 3){
+            intent.putExtra(Intent.EXTRA_TEXT, url)
+        }else{
+            intent.putExtra(Intent.EXTRA_TEXT, shareText)
+        }
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         intent.component =
             ComponentName("com.tencent.mobileqq", "com.tencent.mobileqq.activity.JumpActivity")
@@ -427,7 +434,7 @@ class GeneralSharePop(context: Context) : BottomPopupView(context), View.OnClick
                     hasShare = true
                     ShareManager.listeneWxResp(context)
                     if (type != 1) {
-                        shareUtil.shareText2Memory(shareText!!, shareTitle ?: "探月少儿编程")
+                        shareUtil.shareText2Memory(if(type==3) url!! else shareText!!, shareTitle ?: "探月少儿编程")
                     } else {
                         if (!TextUtils.isEmpty(shareImgPath)) {
                             WxShareUtil.shareImgToWXMoment(
