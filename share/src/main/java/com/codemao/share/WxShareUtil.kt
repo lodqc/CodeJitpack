@@ -13,6 +13,7 @@ import com.codemao.share.ShareManager.encodeBase64File
 import com.codemao.share.ShareUtil.Companion.CREATE_BITMAP_FAILED
 import com.codemao.share.ShareUtil.Companion.UNINSTALL_WX
 import cn.codemao.android.share.interfaces.IshareResult
+import com.codemao.share.NewWxShareUtil.api
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX
 import com.tencent.mm.opensdk.modelmsg.WXImageObject
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage
@@ -37,19 +38,19 @@ object WxShareUtil {
     private var sharing = false
 
 
-    fun shareImgToWXMoment(context: Context, localImageUrl: String?, api: IWXAPI, wxShareListener: IshareResult?) {
-        shareImgToWX(context, localImageUrl, api, wxShareListener, SendMessageToWX.Req.WXSceneTimeline)
+    fun shareImgToWXMoment(context: Context, localImageUrl: String?, wxShareListener: IshareResult?) {
+        shareImgToWX(context, localImageUrl,wxShareListener, SendMessageToWX.Req.WXSceneTimeline)
     }
 
-    fun shareImgToWXFriend(context: Context, localImageUrl: String?, api: IWXAPI, wxShareListener: IshareResult?) {
-        shareImgToWX(context, localImageUrl, api, wxShareListener, SendMessageToWX.Req.WXSceneSession)
+    fun shareImgToWXFriend(context: Context, localImageUrl: String?, wxShareListener: IshareResult?) {
+        shareImgToWX(context, localImageUrl, wxShareListener, SendMessageToWX.Req.WXSceneSession)
     }
 
     /**
      * @param context
      * @param localImageUrl 要分享图片的本地地址，必须在fileprovider规定的文件目录下
      */
-    private fun shareImgToWX(context: Context, localImageUrl: String?, api: IWXAPI, wxShareListener: IshareResult?, scene: Int) {
+    private fun shareImgToWX(context: Context, localImageUrl: String?, wxShareListener: IshareResult?, scene: Int) {
         WechatManager.getInstance().ishareResult = wxShareListener
         if (!api.isWXAppInstalled) {
             wxShareListener?.onFailure(UNINSTALL_WX)
@@ -82,14 +83,14 @@ object WxShareUtil {
      *
      */
     @SuppressLint("CheckResult")
-    fun shareBitmapToWXMoment(context: Context?, bitmap: Bitmap?, api: IWXAPI, wxShareListener: IshareResult?) {
+    fun shareBitmapToWXMoment(context: Context?, bitmap: Bitmap?, wxShareListener: IshareResult?) {
         if (context == null || bitmap == null || sharing) return
         sharing = true
         bitmapSaveFile(context, bitmap)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ file ->
                     sharing = false
-                    shareImgToWXMoment(context, file?.absolutePath, api, wxShareListener)
+                    shareImgToWXMoment(context, file?.absolutePath, wxShareListener)
                 }, {
                     wxShareListener?.onFailure(CREATE_BITMAP_FAILED)
                     sharing = false
@@ -100,14 +101,14 @@ object WxShareUtil {
      *
      */
     @SuppressLint("CheckResult")
-    fun shareBitmapToWXFriend(context: Context?, bitmap: Bitmap?, api: IWXAPI, wxShareListener: IshareResult?) {
+    fun shareBitmapToWXFriend(context: Context?, bitmap: Bitmap?,wxShareListener: IshareResult?) {
         if (context == null || bitmap == null || sharing) return
         sharing = true
         bitmapSaveFile(context, bitmap)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ file ->
                     sharing = false
-                    shareImgToWXFriend(context, file?.absolutePath, api, wxShareListener)
+                    shareImgToWXFriend(context, file?.absolutePath, wxShareListener)
                 }, {
                     wxShareListener?.onFailure(CREATE_BITMAP_FAILED)
                     sharing = false

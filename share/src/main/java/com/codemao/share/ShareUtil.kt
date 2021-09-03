@@ -9,6 +9,7 @@ import com.codemao.share.ShareManager.Bitmap2Bytes
 import com.codemao.share.ShareManager.base64ToBitmap
 import com.tencent.mm.opensdk.openapi.IWXAPI
 import cn.codemao.android.share.interfaces.IshareResult
+import com.codemao.share.NewWxShareUtil.api
 import com.codemao.share.ShareManager.shareDrawableId
 import com.tencent.mm.opensdk.modelmsg.WXImageObject
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage
@@ -26,7 +27,6 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory
 </pre> *
  */
 class ShareUtil(context: Context?) {
-    var api: IWXAPI
     var isWxInstalled: Boolean
     fun openWxApp(): Boolean {
         return api.openWXApp()
@@ -68,10 +68,10 @@ class ShareUtil(context: Context?) {
         } else {
             if (isWxInstalled) {
                 if (isMoment) {
-                    WxShareUtil.shareBitmapToWXMoment(context, bitmap, api, ishareResult)
+                    WxShareUtil.shareBitmapToWXMoment(context, bitmap,ishareResult)
                     //WXMomentShareImage(bitmap, ishareResult);
                 } else {
-                    WxShareUtil.shareBitmapToWXFriend(context, bitmap, api, ishareResult)
+                    WxShareUtil.shareBitmapToWXFriend(context, bitmap,ishareResult)
                     // WXShareImage(bitmap, ishareResult);
                 }
             } else {
@@ -246,11 +246,11 @@ class ShareUtil(context: Context?) {
         SendMessageToWX.Req req = new SendMessageToWX.Req();
         req.transaction = String.valueOf(System.currentTimeMillis());
         req.message = msg;*/if (type == 1) {
-            WxShareUtil.shareBitmapToWXFriend(context, bitmap, api, null)
+            WxShareUtil.shareBitmapToWXFriend(context, bitmap, null)
             //req.scene = SendMessageToWX.Req.WXSceneSession;
         } else {
             // req.scene = SendMessageToWX.Req.WXSceneTimeline;
-            WxShareUtil.shareBitmapToWXMoment(context, bitmap, api, null)
+            WxShareUtil.shareBitmapToWXMoment(context, bitmap, null)
         }
         //调用api接口，发送数据到微信
         // api.sendReq(req);
@@ -263,7 +263,6 @@ class ShareUtil(context: Context?) {
     }
 
     init {
-        api = WXAPIFactory.createWXAPI(context, ShareManager.WX_APP_ID)
         isWxInstalled = api.isWXAppInstalled
     }
 }

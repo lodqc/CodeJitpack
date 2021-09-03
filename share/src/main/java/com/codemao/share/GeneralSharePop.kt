@@ -11,11 +11,14 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.Group
 import androidx.core.view.isVisible
+import com.codemao.share.NewWxShareUtil.api
 import com.codemao.share.ShareManager.WX_USERNAME
 import com.codemao.share.ShareManager.base64ToBitmap
 import com.lxj.xpopup.XPopup
+import com.lxj.xpopup.core.BasePopupView
 import com.lxj.xpopup.core.BottomPopupView
 import com.tencent.connect.share.QQShare
+import com.tencent.mm.opensdk.modelmsg.SendMessageToWX
 import com.tencent.tauth.IUiListener
 import com.tencent.tauth.Tencent
 import com.tencent.tauth.UiError
@@ -31,18 +34,8 @@ import java.net.URLEncoder
  *     desc   :
  * </pre>
  */
-
-const val FROM_STUDY_WEB = 0//来自学习报告页面
-const val FROM_SHARE_WEB = 1//来自成就分享页面
-
 interface ShareListener {
-    fun sucssess()
-    fun checkPermisson(type: Int)
-    fun cancle()
-    fun fail()
-    fun finishS()
     fun showMiaoCode()
-    fun onScreenShootClick()
 }
 
 //分享文本
@@ -51,8 +44,6 @@ fun showShareTextPop(
     text: String?,
     title: String,
     showMiaoCode: ShareListener? = null,
-    uri: Uri? = null,
-    type: Int = -1
 ) {
     XPopup.Builder(context)
         .enableDrag(true)
@@ -61,11 +52,33 @@ fun showShareTextPop(
                 .shareText(text)
                 .shareTitle(title)
                 .showMiaoCode(showMiaoCode)
-                .bindUri(uri)
-                .fromType(type)
+                .setType(2)
         )
+        .show()
+}
 
-
+fun showNativeShareComponent(
+    context: Context,
+    type: Int?,
+    title: String?,
+    url: String?,
+    image_url: String?,
+    image_base64: String?,
+    desc: String?,
+    showMiaoCode: ShareListener? = null,
+) {
+    XPopup.Builder(context)
+        .enableDrag(true)
+        .asCustom(
+            GeneralSharePop(context)
+                .shareText(desc)
+                .shareTitle(title)
+                .setUrl(url)
+                .imageBase64(image_base64)
+                .imageUrl(image_url)
+                .showMiaoCode(showMiaoCode)
+                .setType(type)
+        )
         .show()
 }
 
@@ -75,8 +88,6 @@ fun showShareImgPop(
     imgPath: String?,
     showMiaoCode: ShareListener? = null,
     shareText: String? = null,
-    uri: Uri? = null,
-    type: Int = -1
 ) {
     XPopup.Builder(context)
         .enableDrag(true)
@@ -85,8 +96,7 @@ fun showShareImgPop(
                 .shareText(shareText)//这个需要在sharebitmap前面
                 .shareImage(imgPath)
                 .showMiaoCode(showMiaoCode)
-                .bindUri(uri)
-                .fromType(type)
+                .setType(1)
         )
         .show()
 }
@@ -97,8 +107,6 @@ fun showShareBase64Pop(
     base64: String?,
     showMiaoCode: ShareListener? = null,
     shareText: String? = null,
-    uri: Uri? = null,
-    type: Int = -1
 ) {
     XPopup.Builder(context)
         .enableDrag(true)
@@ -107,8 +115,7 @@ fun showShareBase64Pop(
                 .shareText(shareText)//这个需要在sharebitmap前面
                 .shareBitmap(base64)
                 .showMiaoCode(showMiaoCode)
-                .bindUri(uri)
-                .fromType(type)
+                .setType(1)
         )
         .show()
 }
@@ -119,18 +126,15 @@ fun showShareBitmapPop(
     bitmap: Bitmap?,
     showMiaoCode: ShareListener? = null,
     shareText: String? = null,
-    uri: Uri? = null,
-    type: Int = -1
 ) {
     XPopup.Builder(context)
         .enableDrag(true)
         .asCustom(
             GeneralSharePop(context)
-                .shareText(shareText)//这个需要在sharebitmap前面
+                .shareText(shareText)
                 .shareBitmap(bitmap)
                 .showMiaoCode(showMiaoCode)
-                .bindUri(uri)
-                .fromType(type)
+                .setType(1)
         )
         .show()
 }
@@ -154,13 +158,11 @@ class GeneralSharePop(context: Context) : BottomPopupView(context), View.OnClick
     private var tv_create_url: TextView? = null
 
     private var shareText: String? = ""
-    private var mFromType: Int = -1
     private var shareTitle: String? = ""
     private var shareImgPath: String? = ""
     private var shareBase64: String? = ""
     private var shareBitmap: Bitmap? = null
     private var hasShare: Boolean = false//是否有分享动作  埋点使用
-    private var mUri: Uri? = null//来源的数据  埋点统计来源
     private var isShareText = true//是否是分享文本
     var permissions = arrayOf(
         "android.permission.WRITE_EXTERNAL_STORAGE",
@@ -206,19 +208,8 @@ class GeneralSharePop(context: Context) : BottomPopupView(context), View.OnClick
         return this
     }
 
-    fun fromType(type: Int): GeneralSharePop {
-        mFromType = type
-        return this
-    }
-
-
     fun showMiaoCode(show: ShareListener?): GeneralSharePop {
         mShowMiaoCodeListener = show
-        return this
-    }
-
-    fun bindUri(uri: Uri?): GeneralSharePop {
-        mUri = uri
         return this
     }
 
@@ -388,23 +379,35 @@ class GeneralSharePop(context: Context) : BottomPopupView(context), View.OnClick
                 iv_wx -> {
                     hasShare = true
                     ShareManager.listeneWxResp(context)
-                    if (isShareText) {
-//                        shareUtil.shareText(shareText, shareTitle ?: "探月少儿编程")
-                        val url = URLEncoder.encode(shareText, "utf-8")
-                        WxShareUtil.shareMiniProgram(
-                            WX_USERNAME,
-                            mUri.toString(),
-                            "/pages/webview/main?target=$url",
-                            "",
-                            shareTitle ?: "",
-                            context
-                        )
+                    if (type != 1) {
+                        if (TextUtils.isEmpty(url)) {
+                            shareText?.let { it1 ->
+                                NewWxShareUtil.shareText(
+                                    it1,
+                                    SendMessageToWX.Req.WXSceneSession
+                                )
+                            }
+                        }else{
+                            shareTitle?.let { it1 ->
+                                shareText?.let { it2 ->
+                                    url?.let { it3 ->
+                                        NewWxShareUtil.shareUrl(
+                                            it3,
+                                            it1,
+                                            it2,
+                                            SendMessageToWX.Req.WXSceneSession,
+                                            imageUrl,
+                                            imageBase64
+                                        )
+                                    }
+                                }
+                            }
+                        }
                     } else {
                         if (!TextUtils.isEmpty(shareImgPath)) {
                             WxShareUtil.shareImgToWXFriend(
                                 context,
                                 shareImgPath,
-                                shareUtil.api,
                                 null
                             )
                         } else if (!TextUtils.isEmpty(shareBase64)) {
@@ -413,7 +416,6 @@ class GeneralSharePop(context: Context) : BottomPopupView(context), View.OnClick
                             WxShareUtil.shareBitmapToWXFriend(
                                 context,
                                 shareBitmap,
-                                shareUtil.api,
                                 null
                             )
                         }
@@ -423,15 +425,14 @@ class GeneralSharePop(context: Context) : BottomPopupView(context), View.OnClick
 
                 iv_memory -> {
                     hasShare = true
-                   ShareManager.listeneWxResp(context)
-                    if (isShareText) {
+                    ShareManager.listeneWxResp(context)
+                    if (type != 1) {
                         shareUtil.shareText2Memory(shareText!!, shareTitle ?: "探月少儿编程")
                     } else {
                         if (!TextUtils.isEmpty(shareImgPath)) {
                             WxShareUtil.shareImgToWXMoment(
                                 context,
                                 shareImgPath,
-                                shareUtil.api,
                                 null
                             )
                         } else if (!TextUtils.isEmpty(shareBase64)) {
@@ -440,7 +441,6 @@ class GeneralSharePop(context: Context) : BottomPopupView(context), View.OnClick
                             WxShareUtil.shareBitmapToWXMoment(
                                 context,
                                 shareBitmap,
-                                shareUtil.api,
                                 null
                             )
                         }
@@ -450,10 +450,10 @@ class GeneralSharePop(context: Context) : BottomPopupView(context), View.OnClick
 
                 iv_qq -> {
                     hasShare = true
-                    if (isShareText) {
+                    if (type != 1) {
                         shareQQText()
                     } else {
-                        ShareManager.getPermission(context,permissions){
+                        ShareManager.getPermission(context, permissions) {
                             if (it) {
                                 shareQQImage()
                                 dismiss()
@@ -482,5 +482,30 @@ class GeneralSharePop(context: Context) : BottomPopupView(context), View.OnClick
                 }
             }
         }
+    }
+
+    // 分享类型  1.图片 2.文本 3.链接
+    var type: Int? = 0
+    var url: String? = ""
+    var imageBase64: String? = ""
+    var imageUrl: String? = ""
+    fun setType(type: Int?): GeneralSharePop {
+        this.type = type
+        return this
+    }
+
+    fun setUrl(url: String?): GeneralSharePop {
+        this.url = url
+        return this
+    }
+
+    fun imageBase64(imageBase64: String?): GeneralSharePop {
+        this.imageBase64 = imageBase64
+        return this
+    }
+
+    fun imageUrl(imageUrl: String?): GeneralSharePop {
+        this.imageUrl = imageUrl
+        return this
     }
 }
