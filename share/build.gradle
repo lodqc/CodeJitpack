@@ -63,6 +63,16 @@ uploadArchives {
         // 项目名称
         pom.artifactId = "share-sdk"
         // 版本号
-        pom.version = "1.0.18-SNAPSHOT"
+        pom.version = "1.0.19-SNAPSHOT"
     }
+}
+
+//上传源码 建议在SNAPSHOT版本放开方便调试
+task androidSourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.srcDirs//android.sourceSets.main.java.getSrcDirs()
+}
+
+artifacts {
+    archives androidSourcesJar
 }
