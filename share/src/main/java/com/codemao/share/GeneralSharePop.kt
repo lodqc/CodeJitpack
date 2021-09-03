@@ -57,7 +57,7 @@ fun showShareTextPop(
         .show()
 }
 
-fun showNativeShareComponent(
+fun showNativePop(
     context: Context,
     type: Int?,
     title: String?,

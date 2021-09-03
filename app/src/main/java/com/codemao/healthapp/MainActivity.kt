@@ -7,8 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.codemao.healthmanager.HealthManager
-import com.codemao.share.showNativeShareComponent
-import com.codemao.share.showShareTextPop
+import com.codemao.share.showNativePop
 import com.google.gson.Gson
 
 class MainActivity : AppCompatActivity() {
@@ -40,7 +39,7 @@ class MainActivity : AppCompatActivity() {
                 "    }\n" +
                 "}", ShareNativeBean::class.java)
         fromJson?.payload?.run {
-            showNativeShareComponent(this@MainActivity,type,title,url,imageUrl,imageBase64,desc)
+            showNativePop(this@MainActivity,type,title,url,imageUrl,imageBase64,desc)
         }
     }
 }
