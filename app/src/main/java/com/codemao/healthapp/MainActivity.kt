@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
                 "    }\n" +
                 "}", ShareNativeBean::class.java)
         fromJson?.payload?.run {
-            showNativePop(this@MainActivity,type,title,url,imageUrl,imageBase64,desc)
+            showNativePop(this@MainActivity,type,title,url,"",imageBase64,desc)
         }
     }
 }

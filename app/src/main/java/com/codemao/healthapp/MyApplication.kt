@@ -21,7 +21,7 @@ class MyApplication : Application(){
         super.onCreate()
         SensorsHelper.init(this,BuildConfig.DEBUG,"codemao","探月少儿编程App")
         HealthManagerUi.init(this,BuildConfig.DEBUG,MainActivity::class.java)
-        ShareManager.init(this, WX_APPID,"gh_c3ea31bd2f63",QQ_APPID2,R.mipmap.ic_launcher,object : ShareCallBack {
+        ShareManager.init(this, WX_APPID,"gh_c3ea31bd2f63",QQ_APPID2,R.drawable.ic_launcher,object : ShareCallBack {
             override fun loadBitemap(minProgramCover: String, function: (bitmap: Bitmap) -> Unit) {
                 val imageLoader = ImageLoader.Builder(this@MyApplication)
                     .availableMemoryPercentage(0.25)

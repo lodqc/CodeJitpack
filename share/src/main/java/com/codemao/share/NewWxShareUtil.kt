@@ -2,6 +2,7 @@ package com.codemao.share
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.text.TextUtils
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage
 import com.tencent.mm.opensdk.modelmsg.WXTextObject
 import com.tencent.mm.opensdk.openapi.WXAPIFactory
@@ -38,14 +39,24 @@ object NewWxShareUtil {
     }
 
     fun shareUrl(webpageUrl:String,title:String,description:String,mTargetScene:Int,imgUrl: String?,imgBase64:String?){
-        imgUrl?.run {
-            ShareManager.loadBitemap(this){
-                shareUrl(webpageUrl,title,description,mTargetScene,it)
-            }
-
+        if(TextUtils.isEmpty(imgUrl)&&TextUtils.isEmpty(imgBase64)){
+            val decodeResource = BitmapFactory.decodeResource(
+                ShareManager.getContext().resources,
+                ShareManager.shareDrawableId
+            )
+            shareUrl(webpageUrl,title,description,mTargetScene,decodeResource)
         }
-        ShareManager.base64ToBitmap(imgBase64)?.run {
-            shareUrl(webpageUrl,title,description,mTargetScene,this)
+        if(!TextUtils.isEmpty(imgUrl)){
+            imgUrl?.let {
+                ShareManager.loadBitemap(it){
+                    shareUrl(webpageUrl,title,description,mTargetScene,it)
+                }
+            }
+        }
+        if(!TextUtils.isEmpty(imgBase64)){
+            ShareManager.base64ToBitmap(imgBase64)?.run {
+                shareUrl(webpageUrl,title,description,mTargetScene,this)
+            }
         }
     }
 
